@@ -12,16 +12,34 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] CircleCollider2D _baseCharacterCollider;
     [SerializeField] float _collisionMargin = 0.01f;
     [SerializeField] LayerMask _wallLayers;
+    /// <summary>これ以下で移動キャンセルをしたら直前の方向に戻す</summary>
+    [SerializeField] int _graceFrameCountForCancelMove = 3;
     Rigidbody2D _rb;
     Vector2 _dir;
+    int _frameCountForCancelMove;
+    Vector2 _lastMoveDirection;
 
     public void StartMoving(Vector2 dir)
     {
         _dir = dir;
         _rb.linearVelocity = _moveSpeed * _dir;
+        _lastMoveDirection = transform.up;  // 直前に移動していた方向を記録しておく
 
         if (dir != Vector2.zero)
             transform.up = _dir;
+
+        _frameCountForCancelMove = _graceFrameCountForCancelMove;
+    }
+
+    public void CancelMoving(Vector2 dir)
+    {
+        _rb.linearVelocity = Vector2.zero;
+        _dir = Vector2.zero;
+
+        if (_frameCountForCancelMove >= 0)
+        {
+            transform.up = _lastMoveDirection;
+        }
     }
 
     /// <summary>
@@ -114,5 +132,7 @@ public class CharacterMovement : MonoBehaviour
         {
             _rb.linearVelocity = _moveSpeed * _dir;
         }   // 入力と移動方向がズレたら補正する
+
+        _frameCountForCancelMove--;
     }
 }

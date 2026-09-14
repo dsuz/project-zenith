@@ -9,6 +9,7 @@ public class PlayerInputHandler : MonoBehaviour
 {
     PlayerInput _input;
     public UnityEvent<Vector2> _onStartMove;
+    public UnityEvent<Vector2> _onCancelMove;
     public UnityEvent _onFire;
 
     void Awake()
@@ -16,7 +17,7 @@ public class PlayerInputHandler : MonoBehaviour
         _input = new PlayerInput();
         _input.Player.Move.started += OnStartMove;
         _input.Player.Move.performed += OnStartMove ;
-        _input.Player.Move.canceled += OnStartMove;
+        _input.Player.Move.canceled += OnCancelMove;
         _input.Player.Fire.started += OnFire;
         _input.Enable();
     }
@@ -29,7 +30,15 @@ public class PlayerInputHandler : MonoBehaviour
     void OnStartMove(InputAction.CallbackContext context)
     {
         var dir = context.ReadValue<Vector2>();
+        Debug.Log($"OnStartMove: {dir}");
         _onStartMove.Invoke(dir);
+    }
+
+    void OnCancelMove(InputAction.CallbackContext context)
+    {
+        var dir = context.ReadValue<Vector2>();
+        Debug.Log($"OnCancelMove: {dir}");
+        _onCancelMove.Invoke(dir);
     }
 
     void OnFire(InputAction.CallbackContext context)
