@@ -19,6 +19,9 @@ public class CharacterMovement : MonoBehaviour
     {
         _dir = dir;
         _rb.linearVelocity = _moveSpeed * _dir;
+
+        if (dir != Vector2.zero)
+            transform.up = _dir;
     }
 
     /// <summary>
