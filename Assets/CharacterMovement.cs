@@ -5,6 +5,7 @@ using UnityEngine;
 /// 物理シミュレーションではない移動をする
 /// 移動は８方向のみ
 /// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
 public class CharacterMovement : MonoBehaviour
 {
     [SerializeField] float _moveSpeed = 3f;
@@ -17,6 +18,7 @@ public class CharacterMovement : MonoBehaviour
     public void StartMoving(Vector2 dir)
     {
         _dir = dir;
+        _rb.linearVelocity = _moveSpeed * _dir;
     }
 
     /// <summary>
@@ -34,11 +36,12 @@ public class CharacterMovement : MonoBehaviour
         var center = (Vector2)_baseCharacterCollider.bounds.center;
         var radius = _baseCharacterCollider.radius;
         center += _collisionMargin * dir;
+        radius -= _collisionMargin;
 
         return Physics2D.OverlapCircle(center, radius, _wallLayers) != null;
     }
-   
-    
+
+
     /// <summary>
     /// 指定した方向に壁があるかどうかを判定する
     /// false の場合は動ける
@@ -72,7 +75,7 @@ public class CharacterMovement : MonoBehaviour
         if (dir.y != 0)
         {
             Vector2 line = new Vector2(0, dir.y > 0 ? lineLength : -lineLength);
-            
+
             if (Physics2D.Linecast(center, (Vector2)center + line, _wallLayers))
             {
                 return true;
@@ -88,9 +91,6 @@ public class CharacterMovement : MonoBehaviour
 
         if (_rb)
         {
-            if (_rb.bodyType != RigidbodyType2D.Kinematic)
-                _rb.bodyType = RigidbodyType2D.Kinematic;
-
             if (_rb.gravityScale != 0)
                 _rb.gravityScale = 0;
         }
@@ -98,13 +98,18 @@ public class CharacterMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_dir != Vector2.zero)
+        //if (_dir != Vector2.zero)
+        //{
+        //    if (!IsColliding(_dir))
+        //    {
+        //        var targetPosition = (Vector2)transform.position + _dir * _moveSpeed * Time.fixedDeltaTime;
+        //        transform.position = targetPosition;
+        //    }
+        //}
+
+        if (_rb.linearVelocity != _moveSpeed * _dir)
         {
-            if (!IsColliding(_dir))
-            {
-                var targetPosition = (Vector2)transform.position + _dir * _moveSpeed * Time.fixedDeltaTime;
-                transform.position = targetPosition;
-            }
-        }
+            _rb.linearVelocity = _moveSpeed * _dir;
+        }   // 入力と移動方向がズレたら補正する
     }
 }
