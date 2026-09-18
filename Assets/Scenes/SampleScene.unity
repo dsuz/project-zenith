@@ -950,6 +950,7 @@ MonoBehaviour:
   _wallLayers:
     serializedVersion: 2
     m_Bits: 8
+  _graceFrameCountForChangeDirection: 2
 --- !u!114 &1334874123
 MonoBehaviour:
   m_ObjectHideFlags: 0
