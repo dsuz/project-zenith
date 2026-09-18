@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.Events;
 
 /// <summary>
-/// PlayerInputiInputSystem ‚É‚æ‚è¶¬‚³‚ê‚½ƒNƒ‰ƒXj‚É‚æ‚é“ü—Í‚ğó‚¯æ‚èAÀÛ‚ÌƒAƒNƒVƒ‡ƒ“‚É“n‚·‹@”\‚ğ’ñ‹Ÿ‚·‚é
+/// PlayerInputï¼ˆInputSystem ã«ã‚ˆã‚Šç”Ÿæˆã•ã‚ŒãŸã‚¯ãƒ©ã‚¹ï¼‰ã«ã‚ˆã‚‹å…¥åŠ›ã‚’å—ã‘å–ã‚Šã€å®Ÿéš›ã®ã‚¢ã‚¯ã‚·ãƒ§ãƒ³ã«æ¸¡ã™æ©Ÿèƒ½ã‚’æä¾›ã™ã‚‹
 /// </summary>
 public class PlayerInputHandler : MonoBehaviour
 {
