@@ -16,6 +16,13 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D collision)
     {
-         Destroy(gameObject);
+        var damageable = collision.GetComponent<Damageable>();
+
+        if (damageable)
+        {
+            damageable.Damage(1);
+        }
+
+        Destroy(gameObject);
     }
 }
