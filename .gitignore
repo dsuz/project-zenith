@@ -41,9 +41,6 @@ sysinfo.txt
 # Assets
 Logs/
 UserSettings/
-Assets/UnityTechnologies*
-Assets/Plugins/Demigiant*
-Assets/Resources/DOTweenSettings*
 
 # ProBuilder Settings
 ProjectSettings/Packages/com.unity.probuilder/Settings.json
