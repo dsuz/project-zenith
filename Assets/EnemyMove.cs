@@ -21,23 +21,22 @@ public partial class EnemyMove : Action
         Vector2 agentPos = _agent.Value.transform.position;
         Vector2 targetPos = _target.Value.transform.position;
         var diagonal = targetPos - agentPos;
-        diagonal = diagonal.SnapTo8Direction();
-        var horizontal = new Vector2(diagonal.x, 0).normalized;
-        var vertical = new Vector2(0, diagonal.y).normalized;
+        var normalizedDiagonal = diagonal.SnapTo8Direction();
+        var horizontal = new Vector2(normalizedDiagonal.x, 0).normalized;
+        var vertical = new Vector2(0, normalizedDiagonal.y).normalized;
         bool canMoveHorizontal = !(Physics2D.Linecast(agentPos, agentPos + horizontal));
         bool canMoveVertical = !(Physics2D.Linecast(agentPos, agentPos + vertical));
         bool canMoveDiagonal = !(Physics2D.Linecast(agentPos, agentPos + horizontal + vertical));
 
-        // プレイヤーを追いかける（回り込みができていない）
+        // プレイヤーを追いかける
         if (canMoveHorizontal)
         {
-            _isMoving = true;
-
             if (canMoveVertical)
             {
                 if (canMoveDiagonal)
                 {
                     // Move Diagonal
+                    _isMoving = true;
                     _agent.Value.transform.DOMove(agentPos + horizontal + vertical, 1)
                         .SetEase(Ease.Linear)
                         .OnComplete(() => _isMoving = false);
@@ -45,6 +44,7 @@ public partial class EnemyMove : Action
                 else
                 {
                     // Move Horizontal
+                    _isMoving = true;
                     _agent.Value.transform.DOMove(agentPos + horizontal, 1)
                         .SetEase(Ease.Linear)
                         .OnComplete(() => _isMoving = false);
@@ -53,14 +53,45 @@ public partial class EnemyMove : Action
             else
             {
                 // Move Horizontal
-                _agent.Value.transform.DOMove(agentPos + horizontal, 1)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() => _isMoving = false);
+                if (horizontal == Vector2.zero)
+                {
+                    horizontal = new Vector2(diagonal.x, 0).normalized;
+                    canMoveHorizontal = !(Physics2D.Linecast(agentPos, agentPos + horizontal));
+
+                    if (canMoveHorizontal)
+                    {
+                        _isMoving = true;
+                        _agent.Value.transform.DOMove(agentPos + horizontal, 1)
+                            .SetEase(Ease.Linear)
+                            .OnComplete(() => _isMoving = false);
+                    }
+                }
+                else
+                {
+                    _isMoving = true;
+                    _agent.Value.transform.DOMove(agentPos + horizontal, 1)
+                        .SetEase(Ease.Linear)
+                        .OnComplete(() => _isMoving = false);
+                }
             }
         }
         else
         {
-            if (canMoveVertical)
+            if (vertical == Vector2.zero)
+            {
+                vertical = new Vector2(0, diagonal.y).normalized;
+                canMoveVertical = !(Physics2D.Linecast(agentPos, agentPos + vertical));
+
+                if (canMoveVertical)
+                {
+                    _isMoving = true;
+                    // Move Vertical
+                    _agent.Value.transform.DOMove(agentPos + vertical, 1)
+                        .SetEase(Ease.Linear)
+                        .OnComplete(() => _isMoving = false);
+                }
+            }
+            else
             {
                 _isMoving = true;
                 // Move Vertical
