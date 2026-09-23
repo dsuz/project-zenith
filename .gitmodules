@@ -1,0 +1,3 @@
+[submodule "Assets/sub"]
+	path = Assets/sub
+	url = https://github.com/dsuz/zenithsub.git
