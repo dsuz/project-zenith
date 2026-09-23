@@ -24,9 +24,9 @@ public partial class EnemyMove : Action
         var normalizedDiagonal = diagonal.SnapTo8Direction();
         var horizontal = new Vector2(normalizedDiagonal.x, 0).normalized;
         var vertical = new Vector2(0, normalizedDiagonal.y).normalized;
-        bool canMoveHorizontal = !(Physics2D.Linecast(agentPos, agentPos + horizontal));
-        bool canMoveVertical = !(Physics2D.Linecast(agentPos, agentPos + vertical));
-        bool canMoveDiagonal = !(Physics2D.Linecast(agentPos, agentPos + horizontal + vertical));
+        bool canMoveHorizontal = CheckCanMoveTo(agentPos + horizontal);
+        bool canMoveVertical = CheckCanMoveTo(agentPos + vertical);
+        bool canMoveDiagonal = CheckCanMoveTo(agentPos + horizontal + vertical);
 
         // プレイヤーを追いかける
         if (canMoveHorizontal)
@@ -35,19 +35,11 @@ public partial class EnemyMove : Action
             {
                 if (canMoveDiagonal)
                 {
-                    // Move Diagonal
-                    _isMoving = true;
-                    _agent.Value.transform.DOMove(agentPos + horizontal + vertical, 1)
-                        .SetEase(Ease.Linear)
-                        .OnComplete(() => _isMoving = false);
+                    Move(agentPos + horizontal + vertical);
                 }
                 else
                 {
-                    // Move Horizontal
-                    _isMoving = true;
-                    _agent.Value.transform.DOMove(agentPos + horizontal, 1)
-                        .SetEase(Ease.Linear)
-                        .OnComplete(() => _isMoving = false);
+                    Move(agentPos + horizontal);
                 }
             }
             else
@@ -56,22 +48,16 @@ public partial class EnemyMove : Action
                 if (horizontal == Vector2.zero)
                 {
                     horizontal = new Vector2(diagonal.x, 0).normalized;
-                    canMoveHorizontal = !(Physics2D.Linecast(agentPos, agentPos + horizontal));
+                    canMoveHorizontal = CheckCanMoveTo(agentPos + horizontal);
 
                     if (canMoveHorizontal)
                     {
-                        _isMoving = true;
-                        _agent.Value.transform.DOMove(agentPos + horizontal, 1)
-                            .SetEase(Ease.Linear)
-                            .OnComplete(() => _isMoving = false);
+                        Move(agentPos + horizontal);
                     }
                 }
                 else
                 {
-                    _isMoving = true;
-                    _agent.Value.transform.DOMove(agentPos + horizontal, 1)
-                        .SetEase(Ease.Linear)
-                        .OnComplete(() => _isMoving = false);
+                    Move(agentPos + horizontal);
                 }
             }
         }
@@ -80,28 +66,56 @@ public partial class EnemyMove : Action
             if (vertical == Vector2.zero)
             {
                 vertical = new Vector2(0, diagonal.y).normalized;
-                canMoveVertical = !(Physics2D.Linecast(agentPos, agentPos + vertical));
+                canMoveVertical = CheckCanMoveTo(agentPos + vertical);
 
                 if (canMoveVertical)
                 {
-                    _isMoving = true;
-                    // Move Vertical
-                    _agent.Value.transform.DOMove(agentPos + vertical, 1)
-                        .SetEase(Ease.Linear)
-                        .OnComplete(() => _isMoving = false);
+                    Move(agentPos + vertical);
                 }
             }
             else
             {
-                _isMoving = true;
-                // Move Vertical
-                _agent.Value.transform.DOMove(agentPos + vertical, 1)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() => _isMoving = false);
+                if (canMoveVertical)
+                {
+                    Move(agentPos + vertical);
+                }
             }
         }
 
         return Status.Running;
+    }
+
+    /// <summary>
+    /// 指定した座標に移動可能か調べる
+    /// </summary>
+    /// <param name="targetPosition">移動先座標</param>
+    /// <returns>移動可否</returns>
+    bool CheckCanMoveTo(Vector2 targetPosition)
+    {
+        var result = Physics2D.OverlapCircle(targetPosition, 0.1f);
+        
+        // 何も取れない/自分が取れた 場合は移動可能 それ以外は移動負荷
+        if (result)
+        {
+            if (result.gameObject == _agent.Value)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    void Move(Vector2 targetPosition)
+    {
+        _isMoving = true;
+        _agent.Value.transform.DOMove(targetPosition, 1)
+            .SetEase(Ease.Linear)
+            .OnComplete(() => _isMoving = false);
     }
 
     protected override Status OnUpdate()
@@ -119,4 +133,10 @@ public partial class EnemyMove : Action
     {
         base.OnEnd();
     }
+
+    protected override void OnTeardown()
+    {
+        _agent.Value.transform.DOKill();
+    }
+
 }

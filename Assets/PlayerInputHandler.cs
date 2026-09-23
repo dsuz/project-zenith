@@ -30,14 +30,14 @@ public class PlayerInputHandler : MonoBehaviour
     void OnStartMove(InputAction.CallbackContext context)
     {
         var dir = context.ReadValue<Vector2>();
-        Debug.Log($"OnStartMove: {dir}");
+        //Debug.Log($"OnStartMove: {dir}");
         _onStartMove.Invoke(dir);
     }
 
     void OnCancelMove(InputAction.CallbackContext context)
     {
         var dir = context.ReadValue<Vector2>();
-        Debug.Log($"OnCancelMove: {dir}");
+        //Debug.Log($"OnCancelMove: {dir}");
         _onCancelMove.Invoke(dir);
     }
 
