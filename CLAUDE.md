@@ -19,7 +19,7 @@ Unity 製の 2D トップダウン型アクションゲームのプロトタイ�
 
 ## サブモジュール
 
-`Assets/sub` は git サブモジュール（`https://github.com/dsuz/zenithsub.git`、private）。初期化されていないことがあり、その場合はディレクトリが空になる。中身を前提にしたコードは書かないこと。
+`Assets/sub` は git サブモジュール（`https://github.com/dsuz/zenithsub.git`、private）。ここには有料アセット等、public リポジトリには置けないものが入っている。
 
 ## コード構成（`Assets/` 直下）
 
