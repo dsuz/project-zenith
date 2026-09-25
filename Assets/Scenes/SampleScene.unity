@@ -698,7 +698,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.5
+  m_Radius: 0.44
 --- !u!212 &728348868
 SpriteRenderer:
   serializedVersion: 3
@@ -833,10 +833,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d1b5898b4a87144babcf04e33edad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Spawner
-  _muzzle: {fileID: 0}
-  _bullet: {fileID: 5404654371219435975, guid: bf6de91ee8f06cc4f83171c921cafee5, type: 3}
+  _spawnPoint: {fileID: 0}
+  _spawnee: {fileID: 5404654371219435975, guid: bf6de91ee8f06cc4f83171c921cafee5, type: 3}
   _isKeepSpawning: 1
   _interval: 1
+  _limitCount: 5
+  _dontSpawnWhenSpawneeIsOverlapping: 1
 --- !u!1 &839189425
 GameObject:
   m_ObjectHideFlags: 0
@@ -1176,10 +1178,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d3d1b5898b4a87144babcf04e33edad5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Shoot
-  _muzzle: {fileID: 839189426}
-  _bullet: {fileID: 7275717591988512250, guid: 677398b3ed97d2c4084c5ec1a410ce66, type: 3}
+  _spawnPoint: {fileID: 839189426}
+  _spawnee: {fileID: 7275717591988512250, guid: 677398b3ed97d2c4084c5ec1a410ce66, type: 3}
   _isKeepSpawning: 0
   _interval: 0
+  _limitCount: 2
+  _dontSpawnWhenSpawneeIsOverlapping: 0
 --- !u!95 &1334874124
 Animator:
   serializedVersion: 7
