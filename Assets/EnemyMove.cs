@@ -12,12 +12,15 @@ public partial class EnemyMove : Action
     [SerializeReference] public BlackboardVariable<GameObject> _agent;
     [SerializeReference] public BlackboardVariable<GameObject> _target;
     bool _isMoving = false;
+    LayerMask _obstacleLayers;
 
     protected override Status OnStart()
     {
         if (!_agent.Value || !_target.Value)
             return Status.Failure;
 
+        _obstacleLayers = _agent.Value.TryGetComponent(out EnemyMoveSettings settings)
+            ? settings.ObstacleLayers : default;
         Vector2 agentPos = _agent.Value.transform.position;
         Vector2 targetPos = _target.Value.transform.position;
         var diagonal = targetPos - agentPos;
@@ -92,9 +95,9 @@ public partial class EnemyMove : Action
     /// <returns>移動可否</returns>
     bool CheckCanMoveTo(Vector2 targetPosition)
     {
-        var result = Physics2D.OverlapCircle(targetPosition, 0.1f);
+        var result = Physics2D.OverlapCircle(targetPosition, 0.1f, _obstacleLayers);
         
-        // 何も取れない/自分が取れた 場合は移動可能 それ以外は移動負荷
+        // 何も取れない/自分が取れた 場合は移動可能 それ以外は移動不可
         if (result)
         {
             if (result.gameObject == _agent.Value)

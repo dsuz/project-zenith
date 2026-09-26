@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 511108646955004957}
   - component: {fileID: 9053816738919325152}
   - component: {fileID: 7061379685712862615}
+  - component: {fileID: 1132595859550817596}
   - component: {fileID: 2167653509850970590}
   - component: {fileID: 8346972937693049825}
   - component: {fileID: 1312337610940879563}
@@ -125,6 +126,21 @@ MonoBehaviour:
           m_Value1: 0
         Name: Self
         m_Value: {fileID: 5404654371219435975}
+--- !u!114 &1132595859550817596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5404654371219435975}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5dc6f1f0028ac04cbbc5e5fd9f59031, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyMoveSettings
+  _obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!114 &2167653509850970590
 MonoBehaviour:
   m_ObjectHideFlags: 0
