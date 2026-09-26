@@ -8,6 +8,12 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] float _speed = 5f;
+    [SerializeField] float _lifeTime = 3f;
+
+    void Start()
+    {
+        Destroy(gameObject, _lifeTime);
+    }
 
     void FixedUpdate()
     {
